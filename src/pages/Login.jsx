@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Lock, Mail, Eye, EyeOff, Building2, ShieldCheck, ChevronRight } from 'lucide-react';
-const logo = '/nm-property-logo.png';
+import { Lock, Mail, Eye, EyeOff, ShieldCheck, ChevronRight } from 'lucide-react';
+import logo from '../assets/nm-property-logo.png';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -23,13 +23,13 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8fafc] overflow-hidden relative">
+    <div className="flex justify-center bg-[#f8fafc] overflow-hidden relative pt-12">
         {/* Animated Background Decor */}
         <div className="absolute top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] animate-pulse" />
         <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-primary/5 rounded-full blur-[80px] animate-pulse delay-700" />
         
-        <div className="w-full max-w-lg p-8 z-10 animate-fade-in">
-            <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-2xl p-10 md:p-14 relative overflow-hidden group">
+        <div className="w-full max-w-lg p-8 max-[426px]:p-4 z-10 animate-fade-in">
+            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-10 md:p-14 max-[426px]:p-4 relative overflow-hidden group">
                 {/* Branding Indicator */}
                 <div className="absolute top-0 left-0 w-full h-1.5 bg-primary" />
                 
@@ -44,36 +44,36 @@ const Login = () => {
 
                     <form onSubmit={handleSubmit} className="space-y-6 text-left">
                         <div className="space-y-2">
-                             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                             <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Email Address</label>
                              <div className="relative">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" size={18} />
                                 <input 
                                     type="email"
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="admin@propertydeals.com"
-                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white transition-all text-slate-900 placeholder:text-slate-300"
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-4 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white transition-all text-slate-900 placeholder:text-slate-500"
                                 />
                              </div>
                         </div>
 
                         <div className="space-y-2">
-                             <label className="text-xs font-bold text-slate-400 uppercase tracking-widest ml-1">Secure Password</label>
+                             <label className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Secure Password</label>
                              <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={18} />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" size={18} />
                                 <input 
                                     type={showPassword ? "text" : "password"}
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••••••"
-                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-12 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white transition-all text-slate-900 placeholder:text-slate-300"
+                                    className="w-full bg-slate-50 border border-slate-100 rounded-2xl py-4 pl-12 pr-12 text-sm font-semibold focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white transition-all text-slate-900 placeholder:text-slate-500"
                                 />
                                 <button 
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-600 transition-colors cursor-pointer"
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
@@ -90,21 +90,21 @@ const Login = () => {
 
                         <button 
                             type="submit"
-                            className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-4 rounded-2xl transition-all shadow-xl shadow-primary/20 active:scale-[0.98] flex items-center justify-center group/btn"
+                            className="w-full bg-primary hover:bg-primary-dark text-white font-bold py-3.5 rounded-2xl transition-all shadow-xl shadow-primary/20 active:scale-[0.98] flex items-center justify-center group/btn cursor-pointer"
                         >
                             Sign In Securely
                             <ChevronRight size={20} className="ml-2 group-hover/btn:translate-x-1 transition-transform" />
                         </button>
                     </form>
 
-                    <div className="pt-6 border-t border-slate-50 flex items-center justify-center space-x-2 text-[10px] font-bold text-slate-300 uppercase tracking-widest">
+                    <div className="pt-2 flex items-center justify-center space-x-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
                         <ShieldCheck size={14} className="text-primary" />
                         <span>Powered by Secure Realty CRM</span>
                     </div>
                 </div>
             </div>
             
-            <p className="text-center mt-8 text-slate-400 text-xs font-semibold">
+            <p className="text-center mt-8 text-slate-500 text-xs font-semibold">
                 © 2026 Navi Mumbai Property Deals. All Rights Reserved.
             </p>
         </div>
