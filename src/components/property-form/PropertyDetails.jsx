@@ -1,7 +1,6 @@
 "use client";
-import React from "react";
 import { motion } from "framer-motion";
-import { Layers, Compass, Calendar, Car, Sofa, Ruler, Grid3X3, Home, Hammer, Sparkles, Clock, History, CalendarDays, Check, Layout, Square } from "lucide-react";
+import { Layers, Compass, Car, Sofa, Ruler, Home, Hammer, Sparkles, Clock, History, CalendarDays, Check, Square } from "lucide-react";
 import CustomDropdown from "./CustomDropdown";
 
 const PropertyDetails = ({ formData, updateFormData }) => {
@@ -9,7 +8,7 @@ const PropertyDetails = ({ formData, updateFormData }) => {
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white/80 backdrop-blur-xl border border-zinc-100 rounded-[32px] p-8 shadow-sm hover:shadow-md transition-all duration-500"
+            className="bg-white/80 backdrop-blur-xl border border-zinc-100 rounded-[32px] p-8 max-[426px]:p-4 shadow-sm hover:shadow-md transition-all duration-500"
         >
             <div className="flex items-center gap-4 mb-8">
                 <div className="w-12 h-12 rounded-2xl bg-brand-primary/10 flex items-center justify-center text-brand-primary">
@@ -186,7 +185,7 @@ const PropertyDetails = ({ formData, updateFormData }) => {
                                     key={item.value}
                                     type="button"
                                     onClick={() => updateFormData("age", item.value)}
-                                    className={`relative flex-1 py-4 rounded-2xl text-[12px] font-black transition-all cursor-pointer flex items-center justify-center gap-2 z-10 cursor-pointer
+                                    className={`relative flex-1 py-4 max-[426px]:p-3 rounded-2xl text-[12px] font-black transition-all cursor-pointer flex items-center justify-center gap-2 z-10 cursor-pointer
                                         ${isActive ? "text-white" : "text-brand-paragraph hover:text-brand-heading"}`}
                                 >
                                     <item.icon className={`w-4 h-4 transition-colors ${isActive ? "text-white" : "text-brand-paragraph/60"}`} />
@@ -195,7 +194,7 @@ const PropertyDetails = ({ formData, updateFormData }) => {
                                     {isActive && (
                                         <motion.div
                                             layoutId="active-age-bg"
-                                            className="absolute inset-0 bg-brand-primary rounded-2xl -z-10"
+                                            className="absolute inset-0 bg-brand-primary rounded-full -z-10"
                                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                         />
                                     )}
