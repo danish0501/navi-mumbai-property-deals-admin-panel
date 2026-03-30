@@ -82,7 +82,40 @@ const PropertyForm = ({ initialData, onSave, onCancel }) => {
   const visibleSections = sections.filter(s => s.show !== false);
   const currentIndex = visibleSections.findIndex(s => s.id === activeTab);
 
+  const isSectionValid = (sectionId) => {
+    switch (sectionId) {
+      case 'basic':
+        return !!(formData.title?.trim() && formData.propertyType && formData.configuration && (formData.propertyType !== 'residential' || !!formData.configDetails?.trim()));
+      case 'description':
+        return !!formData.description?.trim() && formData.description !== '<p><br></p>';
+      case 'rental':
+        if (formData.purpose !== 'rent') return true;
+        return (formData.suitableFor || []).length > 0 && !!formData.availableFrom;
+      case 'pricing':
+        if (formData.purpose === 'sell') {
+          return !!formData.price?.trim();
+        } else {
+          return !!formData.rentPrice?.trim() && !!formData.securityDeposit?.trim();
+        }
+      case 'location':
+        return !!formData.address?.trim() && !!formData.location?.trim();
+      case 'details':
+        const basicDetails = !!(formData.area?.trim() && formData.furnishing && formData.facing && formData.floor?.trim() && formData.totalFloors && formData.parking && formData.age);
+        if (formData.purpose === 'sell') {
+          return basicDetails && !!formData.constructionStatus;
+        }
+        return basicDetails;
+      case 'gallery':
+        return (formData.gallery || []).length > 0;
+      case 'amenities':
+      case 'nearby':
+      default:
+        return true;
+    }
+  };
+
   const handleNext = () => {
+    if (!isSectionValid(activeTab)) return;
     if (currentIndex < visibleSections.length - 1) {
       setActiveTab(visibleSections[currentIndex + 1].id);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -96,6 +129,17 @@ const PropertyForm = ({ initialData, onSave, onCancel }) => {
     }
   };
 
+  const canNavigateTo = (targetId) => {
+    const targetIndex = visibleSections.findIndex(s => s.id === targetId);
+    if (targetIndex <= currentIndex) return true;
+    
+    // Check if all previous sections are valid
+    for (let i = 0; i < targetIndex; i++) {
+      if (!isSectionValid(visibleSections[i].id)) return false;
+    }
+    return true;
+  };
+
   const ActiveComponent = visibleSections.find(s => s.id === activeTab)?.component || BasicInfo;
 
   return (
@@ -107,17 +151,20 @@ const PropertyForm = ({ initialData, onSave, onCancel }) => {
             const Icon = section.icon;
             const isActive = activeTab === section.id;
             const isCompleted = visibleSections.indexOf(section) < currentIndex;
+            const isDisabled = !canNavigateTo(section.id);
 
             return (
               <button
                 key={section.id}
-                onClick={() => setActiveTab(section.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-[13px] font-black transition-all whitespace-nowrap cursor-pointer
+                onClick={() => !isDisabled && setActiveTab(section.id)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-full text-[13px] font-black transition-all whitespace-nowrap
                   ${isActive
-                    ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20'
+                    ? 'bg-brand-primary text-white shadow-lg shadow-brand-primary/20 cursor-default'
                     : isCompleted
-                      ? 'text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20'
-                      : 'text-brand-paragraph hover:text-brand-heading hover:bg-zinc-100'}`}
+                      ? 'text-brand-primary bg-brand-primary/10 hover:bg-brand-primary/20 cursor-pointer'
+                      : isDisabled
+                        ? 'text-brand-muted opacity-100 cursor-not-allowed'
+                        : 'text-brand-paragraph hover:text-brand-heading hover:bg-zinc-100 cursor-pointer'}`}
               >
                 {isCompleted ? <CheckCircle2 size={16} /> : <Icon size={16} />}
                 {section.label}
@@ -144,6 +191,7 @@ const PropertyForm = ({ initialData, onSave, onCancel }) => {
           </motion.div>
         </AnimatePresence>
       </div>
+
 
       {/* Footer Actions */}
       <div className="w-full mt-12 px-2">
@@ -189,10 +237,12 @@ const PropertyForm = ({ initialData, onSave, onCancel }) => {
 
             {currentIndex < visibleSections.length - 1 ? (
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
+                whileHover={isSectionValid(activeTab) ? { scale: 1.02 } : {}}
+                whileTap={isSectionValid(activeTab) ? { scale: 0.98 } : {}}
                 onClick={handleNext}
-                className="flex items-center gap-2 md:gap-3 bg-zinc-900 text-white px-5 md:px-8 py-3.5 md:py-4 max-[426px]:py-3 rounded-full text-[13px] md:text-[14px] font-bold hover:bg-black transition-all cursor-pointer shadow-xl shadow-zinc-900/10"
+                disabled={!isSectionValid(activeTab)}
+                className={`flex items-center gap-2 md:gap-3 bg-zinc-900 text-white px-5 md:px-8 py-3.5 md:py-4 max-[426px]:py-3 rounded-full text-[13px] md:text-[14px] font-bold transition-all shadow-xl shadow-zinc-900/10
+                  ${isSectionValid(activeTab) ? 'hover:bg-black cursor-pointer' : 'opacity-30 cursor-not-allowed'}`}
               >
                 <span className="hidden min-[500px]:inline">Next Section</span>
                 <span className="min-[500px]:hidden">Next</span>
@@ -200,10 +250,12 @@ const PropertyForm = ({ initialData, onSave, onCancel }) => {
               </motion.button>
             ) : (
               <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => onSave(formData)}
-                className="flex items-center gap-2 md:gap-3 bg-brand-primary text-white px-6 md:px-10 py-3.5 md:py-4 rounded-2xl text-[13px] md:text-[14px] font-bold hover:bg-brand-primary-dark transition-all cursor-pointer shadow-xl shadow-brand-primary/20"
+                whileHover={isSectionValid(activeTab) ? { scale: 1.02 } : {}}
+                whileTap={isSectionValid(activeTab) ? { scale: 0.98 } : {}}
+                onClick={() => isSectionValid(activeTab) && onSave(formData)}
+                disabled={!isSectionValid(activeTab)}
+                className={`flex items-center gap-2 md:gap-3 bg-brand-primary text-white px-5 max-[426px]:px-3 md:px-10 py-3.5 max-[426px]:py-3 md:py-4 rounded-full text-[13px] md:text-[14px] font-bold transition-all shadow-xl shadow-brand-primary/20
+                  ${isSectionValid(activeTab) ? 'hover:bg-brand-primary-dark cursor-pointer' : 'opacity-30 cursor-not-allowed'}`}
               >
                 <Save size={18} className="md:w-5 md:h-5" />
                 <span className="hidden min-[500px]:inline">Publish Property</span>
