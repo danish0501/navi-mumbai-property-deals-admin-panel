@@ -53,6 +53,10 @@ const BlogManagement = () => {
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
+    const customBlogs = JSON.parse(localStorage.getItem('custom_blogs') || '[]');
+    if (customBlogs.length > 0) {
+      setBlogs([...customBlogs, ...blogsData]);
+    }
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
