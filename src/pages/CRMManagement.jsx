@@ -75,12 +75,12 @@ const CRMManagement = () => {
 
   const handleMouseEnter = (e, id) => {
     if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-    
+
     const rect = e.currentTarget.getBoundingClientRect();
     const availableSpaceBelow = window.innerHeight - rect.bottom;
-    const dropdownHeight = 350; 
+    const dropdownHeight = 350;
     const side = (availableSpaceBelow < dropdownHeight && rect.top > dropdownHeight) ? 'up' : 'down';
-    
+
     setDropdownPosition(side);
     setDropdownCoords({
       top: side === 'up' ? rect.top + window.scrollY : rect.bottom + window.scrollY,
@@ -177,11 +177,9 @@ const CRMManagement = () => {
   return (
     <div className="space-y-8 animate-fade-in text-left">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Contact Enquiries</h1>
-          <p className="text-slate-500">Manage and follow up with your potential leads.</p>
-        </div>
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 max-[426px]:text-center max-[426px]:text-3xl">Contact Enquiries</h1>
+        <p className="text-slate-500 max-[426px]:hidden">Manage and follow up with your potential leads.</p>
       </div>
 
       {/* Stats Cards */}
@@ -344,7 +342,7 @@ const CRMManagement = () => {
       {createPortal(
         <AnimatePresence>
           {openDropdownId && selectedEnquiry && (
-            <div 
+            <div
               className="fixed inset-0 z-[9999] pointer-events-none"
               onClick={() => setOpenDropdownId(null)}
             >
@@ -354,8 +352,8 @@ const CRMManagement = () => {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: dropdownPosition === 'up' ? 10 : -10 }}
                   onMouseEnter={() => {
-                        if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-                    }}
+                    if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
+                  }}
                   onMouseLeave={handleMouseLeave}
                   ref={dropdownRef}
                   style={{

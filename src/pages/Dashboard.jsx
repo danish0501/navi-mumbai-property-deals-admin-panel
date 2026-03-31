@@ -1,8 +1,9 @@
-import React from 'react';
-import { 
-  Building2, 
-  Users, 
-  Eye, 
+import { useState, useEffect } from 'react';
+import { NavLink } from 'react-router-dom';
+import {
+  Building2,
+  Users,
+  Eye,
   TrendingUp,
   ArrowUpRight,
   ArrowDownRight,
@@ -12,18 +13,15 @@ import {
   FileText,
   ChevronRight,
   MapPin,
-  Mail,
   UserPlus,
   PieChart as PieChartIcon,
   BarChart2
 } from 'lucide-react';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   AreaChart,
   Area,
@@ -31,7 +29,6 @@ import {
   Pie,
   Cell
 } from 'recharts';
-import { NavLink } from 'react-router-dom';
 
 // Data from other modules (Simplified/Mocked for Dashboard)
 const propertiesData = [
@@ -80,7 +77,7 @@ const StatCard = ({ title, value, icon: Icon, trend, trendValue, color = "primar
   <div className="ag-card p-6 flex items-start justify-between">
     <div>
       <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
-      <h3 className="text-2xl font-bold text-slate-900">{value}</h3>
+      <h3 className="text-2xl font-bold text-black">{value}</h3>
       <div className="flex items-center mt-2">
         {trend === 'up' ? (
           <ArrowUpRight className="text-emerald-500 mr-1" size={14} />
@@ -90,7 +87,7 @@ const StatCard = ({ title, value, icon: Icon, trend, trendValue, color = "primar
         <span className={`text-xs font-semibold ${trend === 'up' ? 'text-emerald-500' : 'text-red-500'}`}>
           {trendValue}
         </span>
-        <span className="text-xs text-slate-400 ml-1">vs last month</span>
+        <span className="text-xs text-slate-500 ml-1">vs last month</span>
       </div>
     </div>
     <div className={`p-3 bg-${color}/10 rounded-xl text-${color}`}>
@@ -100,46 +97,54 @@ const StatCard = ({ title, value, icon: Icon, trend, trendValue, color = "primar
 );
 
 const Dashboard = () => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 426);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 426);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="space-y-8 animate-fade-in text-left">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard Overview</h1>
-        <p className="text-slate-500">Welcome back, Administrator. Here's a snapshot of your platform.</p>
+        <h1 className="text-2xl font-bold text-black max-[426px]:text-center max-[426px]:text-3xl">Dashboard Overview</h1>
+        <p className="text-slate-500 max-[426px]:hidden">Welcome back, Administrator. Here's a snapshot of your platform.</p>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard 
-          title="Total Properties" 
-          value="1,284" 
-          icon={Building2} 
-          trend="up" 
-          trendValue="12.5%" 
+        <StatCard
+          title="Total Properties"
+          value="1,284"
+          icon={Building2}
+          trend="up"
+          trendValue="12.5%"
           color="primary"
         />
-        <StatCard 
-          title="Active Listings" 
-          value="842" 
-          icon={TrendingUp} 
-          trend="up" 
-          trendValue="8.2%" 
+        <StatCard
+          title="Active Listings"
+          value="842"
+          icon={TrendingUp}
+          trend="up"
+          trendValue="8.2%"
           color="indigo-600"
         />
-        <StatCard 
-          title="New Leads" 
-          value="156" 
-          icon={Users} 
-          trend="up" 
-          trendValue="24.1%" 
+        <StatCard
+          title="New Leads"
+          value="156"
+          icon={Users}
+          trend="up"
+          trendValue="24.1%"
           color="emerald-600"
         />
-        <StatCard 
-          title="Total Agents" 
-          value="42" 
-          icon={UserPlus} 
-          trend="up" 
-          trendValue="4.8%" 
+        <StatCard
+          title="Total Agents"
+          value="42"
+          icon={UserPlus}
+          trend="up"
+          trendValue="4.8%"
           color="amber-600"
         />
       </div>
@@ -147,13 +152,13 @@ const Dashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Chart Section */}
         <div className="lg:col-span-2 space-y-6">
-          <div className="ag-card p-6">
-            <div className="flex items-center justify-between mb-8">
+          <div className="ag-card p-6 max-[426px]:p-4">
+            <div className="flex items-center justify-between max-[426px]:flex-col max-[426px]:items-start mb-8">
               <div>
-                <h4 className="text-lg font-bold text-slate-900">Platform Performance</h4>
+                <h4 className="text-xl font-bold text-slate-900">Platform Performance</h4>
                 <p className="text-sm text-slate-500">Property growth and lead generation trends.</p>
               </div>
-              <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-4 max-[426px]:mt-4">
                 <div className="flex items-center">
                   <div className="w-3 h-3 bg-primary rounded-full mr-2"></div>
                   <span className="text-xs font-semibold text-slate-600">Properties</span>
@@ -164,50 +169,53 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="h-[350px] w-full">
+            <div className="h-[350px] max-[426px]:h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={chartData}>
+                <AreaChart
+                  data={chartData}
+                  margin={isMobile ? { top: 10, right: 0, left: -30, bottom: 0 } : { top: 10, right: 30, left: 0, bottom: 0 }}
+                >
                   <defs>
                     <linearGradient id="colorProp" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#baa360" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="#baa360" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#baa360" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#baa360" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2}/>
-                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2} />
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                  <XAxis 
-                    dataKey="name" 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{fill: '#64748b', fontSize: 12}}
+                  <XAxis
+                    dataKey="name"
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#64748b', fontSize: 12 }}
                     dy={10}
                   />
-                  <YAxis 
-                    axisLine={false} 
-                    tickLine={false} 
-                    tick={{fill: '#64748b', fontSize: 12}}
+                  <YAxis
+                    axisLine={false}
+                    tickLine={false}
+                    tick={{ fill: '#64748b', fontSize: 12 }}
                   />
-                  <Tooltip 
-                    contentStyle={{borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)'}}
+                  <Tooltip
+                    contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="properties" 
-                    stroke="#baa360" 
+                  <Area
+                    type="monotone"
+                    dataKey="properties"
+                    stroke="#baa360"
                     strokeWidth={3}
-                    fillOpacity={1} 
-                    fill="url(#colorProp)" 
+                    fillOpacity={1}
+                    fill="url(#colorProp)"
                   />
-                  <Area 
-                    type="monotone" 
-                    dataKey="leads" 
-                    stroke="#6366f1" 
+                  <Area
+                    type="monotone"
+                    dataKey="leads"
+                    stroke="#6366f1"
                     strokeWidth={3}
-                    fillOpacity={1} 
-                    fill="url(#colorLeads)" 
+                    fillOpacity={1}
+                    fill="url(#colorLeads)"
                   />
                 </AreaChart>
               </ResponsiveContainer>
@@ -215,88 +223,88 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-             {/* Category Distribution Doughnut */}
-             <div className="ag-card p-6">
-               <div className="flex items-center justify-between mb-2">
-                 <h4 className="text-base font-bold text-slate-900">Category Mix</h4>
-                 <PieChartIcon size={18} className="text-slate-400" />
-               </div>
-               <div className="flex flex-col items-center">
-                 <div className="h-[200px] w-full">
-                   <ResponsiveContainer width="100%" height="100%">
-                     <PieChart>
-                       <Pie
-                         data={categoryDistribution}
-                         cx="50%"
-                         cy="50%"
-                         innerRadius={60}
-                         outerRadius={80}
-                         paddingAngle={5}
-                         dataKey="value"
-                       >
-                         {categoryDistribution.map((entry, index) => (
-                           <Cell key={`cell-${index}`} fill={entry.color} />
-                         ))}
-                       </Pie>
-                       <Tooltip 
-                          contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'}}
-                       />
-                     </PieChart>
-                   </ResponsiveContainer>
-                 </div>
-                 <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-4 w-full">
-                    {categoryDistribution.map((entry) => (
-                      <div key={entry.name} className="flex items-center justify-between">
-                         <div className="flex items-center">
-                           <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: entry.color }}></div>
-                           <span className="text-xs font-semibold text-slate-500">{entry.name}</span>
-                         </div>
-                         <span className="text-xs font-bold text-slate-900">{Math.round((entry.value / 1060) * 100)}%</span>
+            {/* Category Distribution Doughnut */}
+            <div className="ag-card p-6 max-[426px]:p-4">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="text-lg font-bold text-black">Category Mix</h4>
+                <PieChartIcon size={18} className="text-slate-500" />
+              </div>
+              <div className="flex flex-col items-center">
+                <div className="h-[200px] w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={categoryDistribution}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={60}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {categoryDistribution.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                <div className="flex flex-col space-y-3 mt-6 w-full px-2">
+                  {categoryDistribution.map((entry) => (
+                    <div key={entry.name} className="flex items-center justify-between group">
+                      <div className="flex items-center">
+                        <div className="w-2.5 h-2.5 rounded-full mr-3 shadow-sm transition-all" style={{ backgroundColor: entry.color }}></div>
+                        <span className="text-sm font-semibold text-slate-500 group-hover:text-black transition-colors">{entry.name}</span>
                       </div>
-                    ))}
-                 </div>
-               </div>
-             </div>
+                      <span className="text-sm font-bold text-black">{Math.round((entry.value / 1060) * 100)}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
 
-             {/* Top Regional Activity */}
-             <div className="ag-card p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h4 className="text-base font-bold text-slate-900">Regional Pulse</h4>
-                  <BarChart2 size={18} className="text-slate-400" />
-                </div>
-                <div className="space-y-4">
-                   {topLocations.map((loc) => (
-                     <div key={loc.name} className="space-y-2">
-                        <div className="flex items-center justify-between">
-                           <span className="text-xs font-bold text-slate-900">{loc.name}</span>
-                           <div className="flex items-center text-[10px] font-black text-emerald-500">
-                              <ArrowUpRight size={10} className="mr-0.5" /> {loc.growth}
-                           </div>
-                        </div>
-                        <div className="relative w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-                           <div 
-                             className={`absolute left-0 top-0 h-full rounded-full ${loc.color}`}
-                             style={{ width: `${(loc.leads / 840) * 100}%` }}
-                           ></div>
-                        </div>
-                        <div className="flex justify-between text-[10px] text-slate-400 font-medium">
-                           <span>{loc.leads} Interested Leads</span>
-                           <span>{(loc.leads / 2450 * 100).toFixed(1)}% Share</span>
-                        </div>
-                     </div>
-                   ))}
-                </div>
-                <div className="mt-8 p-3 bg-slate-50 rounded-xl border border-slate-100">
-                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-center">Market Leader</p>
-                    <p className="text-sm font-bold text-primary text-center mt-1">CBD Belapur is currently top trending</p>
-                </div>
-             </div>
+            {/* Top Regional Activity */}
+            <div className="ag-card p-6 max-[426px]:p-4">
+              <div className="flex items-center justify-between mb-6">
+                <h4 className="text-lg font-bold text-black">Regional Pulse</h4>
+                <BarChart2 size={18} className="text-slate-500" />
+              </div>
+              <div className="space-y-4">
+                {topLocations.map((loc) => (
+                  <div key={loc.name} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-bold text-black">{loc.name}</span>
+                      <div className="flex items-center text-[12px] font-black text-emerald-500">
+                        <ArrowUpRight size={12} className="mr-0.5" /> {loc.growth}
+                      </div>
+                    </div>
+                    <div className="relative w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                      <div
+                        className={`absolute left-0 top-0 h-full rounded-full ${loc.color}`}
+                        style={{ width: `${(loc.leads / 840) * 100}%` }}
+                      ></div>
+                    </div>
+                    <div className="flex justify-between text-[12px] text-slate-500 font-medium">
+                      <span>{loc.leads} Interested Leads</span>
+                      <span>{(loc.leads / 2450 * 100).toFixed(1)}% Share</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                <p className="text-[10px] max-[426px]:text-[12px] text-slate-500 font-bold uppercase tracking-widest text-center">Market Leader</p>
+                <p className="text-xs max-[426px]:text-sm font-bold text-primary text-center mt-1">CBD Belapur is currently top trending</p>
+              </div>
+            </div>
           </div>
 
           {/* Recent Properties */}
           <div className="ag-card overflow-hidden">
-            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
-              <h4 className="text-lg font-bold text-slate-900">Recent Properties</h4>
+            <div className="p-6 max-[426px]:p-4 border-b border-slate-50 flex items-center justify-between">
+              <h4 className="text-lg font-bold text-black">Recent Properties</h4>
               <NavLink to="/admin-panel/properties" className="text-sm font-semibold text-primary hover:underline flex items-center">
                 View All <ChevronRight size={16} />
               </NavLink>
@@ -309,17 +317,16 @@ const Dashboard = () => {
                       <Building2 size={24} />
                     </div>
                     <div>
-                      <p className="font-bold text-slate-900 leading-tight">{prop.title}</p>
+                      <p className="font-bold text-black leading-tight">{prop.title}</p>
                       <div className="flex items-center text-xs text-slate-500 mt-1">
                         <MapPin size={12} className="mr-1" /> {prop.location}
                       </div>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-slate-900">{prop.price}</p>
-                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
-                      prop.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'
-                    }`}>
+                    <p className="font-bold text-black">{prop.price}</p>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${prop.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'
+                      }`}>
                       {prop.status}
                     </span>
                   </div>
@@ -333,10 +340,10 @@ const Dashboard = () => {
         <div className="space-y-6">
           {/* Recent Enquiries */}
           <div className="ag-card overflow-hidden">
-            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
-              <h4 className="text-lg font-bold text-slate-900">Recent Leads</h4>
+            <div className="p-6 max-[426px]:p-4 border-b border-slate-50 flex items-center justify-between">
+              <h4 className="text-lg font-bold text-black">Recent Leads</h4>
               <NavLink to="/admin-panel/inquiries" className="text-sm font-semibold text-primary hover:underline flex items-center text-right">
-                <ChevronRight size={16} />
+                <ChevronRight size={18} />
               </NavLink>
             </div>
             <div className="p-4 space-y-4">
@@ -346,15 +353,15 @@ const Dashboard = () => {
                     {lead.name.charAt(0)}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-900 text-sm truncate">{lead.name}</p>
-                    <p className="text-xs text-slate-500 flex items-center truncate">
-                      <MessageSquare size={12} className="mr-1" /> {lead.property}
+                    <p className="font-bold text-black text-base truncate">{lead.name}</p>
+                    <p className="text-sm text-slate-500 flex items-center truncate">
+                      <MessageSquare size={14} className="mr-1" /> {lead.property}
                     </p>
                     <div className="flex items-center justify-between mt-1">
-                       <span className="text-[10px] font-medium text-slate-400">{lead.date}</span>
-                       <span className={`text-[10px] font-black uppercase ${lead.status === 'Pending' ? 'text-amber-500' : 'text-emerald-500'}`}>
-                         {lead.status}
-                       </span>
+                      <span className="text-[12px] font-medium text-slate-500">{lead.date}</span>
+                      <span className={`text-[10px] font-black uppercase ${lead.status === 'Pending' ? 'text-amber-500' : 'text-emerald-500'}`}>
+                        {lead.status}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -364,23 +371,23 @@ const Dashboard = () => {
 
           {/* Blog Activity */}
           <div className="ag-card overflow-hidden">
-            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
-              <h4 className="text-lg font-bold text-slate-900">Blog Activity</h4>
+            <div className="p-6 max-[426px]:p-4 border-b border-slate-50 flex items-center justify-between">
+              <h4 className="text-lg font-bold text-black">Blog Activity</h4>
               <NavLink to="/admin-panel/blogs" className="text-sm font-semibold text-primary hover:underline flex items-center">
-                <ChevronRight size={16} />
+                <ChevronRight size={18} />
               </NavLink>
             </div>
             <div className="p-4 space-y-4">
               {blogsData.map((blog) => (
                 <div key={blog.id} className="group">
-                  <p className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors line-clamp-2">
+                  <p className="text-base font-bold text-black group-hover:text-primary transition-colors line-clamp-1">
                     {blog.title}
                   </p>
                   <div className="flex items-center justify-between mt-2">
-                    <div className="flex items-center text-xs text-slate-500">
-                      <Eye size={12} className="mr-1" /> {blog.views.toLocaleString()} views
+                    <div className="flex items-center text-sm text-slate-500">
+                      <Eye size={14} className="mr-1" /> {blog.views.toLocaleString()} views
                     </div>
-                    <span className="text-[10px] text-slate-400 font-medium">{blog.date}</span>
+                    <span className="text-[12px] text-slate-500 font-medium">{blog.date}</span>
                   </div>
                 </div>
               ))}
@@ -389,10 +396,10 @@ const Dashboard = () => {
 
           {/* Top Performing Agents */}
           <div className="ag-card overflow-hidden">
-            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
-              <h4 className="text-lg font-bold text-slate-900">Top Agents</h4>
+            <div className="p-6 max-[426px]:p-4 border-b border-slate-50 flex items-center justify-between">
+              <h4 className="text-lg font-bold text-black">Top Agents</h4>
               <NavLink to="/admin-panel/users" className="text-sm font-semibold text-primary hover:underline flex items-center">
-                <ChevronRight size={16} />
+                <ChevronRight size={18} />
               </NavLink>
             </div>
             <div className="p-4 space-y-4">
@@ -403,19 +410,18 @@ const Dashboard = () => {
               ].map((agent, i) => (
                 <div key={agent.name} className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
                   <div className="flex items-center space-x-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold ${
-                      i === 0 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
-                    }`}>
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-[12px] font-bold ${i === 0 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
+                      }`}>
                       {agent.avatar}
                     </div>
                     <div>
-                      <p className="text-sm font-bold text-slate-900">{agent.name}</p>
-                      <p className="text-[10px] text-slate-500">{agent.leads} Active Leads</p>
+                      <p className="text-base font-bold text-black">{agent.name}</p>
+                      <p className="text-[12px] text-slate-500">{agent.leads} Active Leads</p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-black text-emerald-600">{agent.rate}</p>
-                    <p className="text-[10px] text-slate-400 font-medium whitespace-nowrap">Conv. Rate</p>
+                    <p className="text-sm font-black text-emerald-600">{agent.rate}</p>
+                    <p className="text-[12px] text-slate-500 font-medium whitespace-nowrap">Conv. Rate</p>
                   </div>
                 </div>
               ))}
@@ -423,26 +429,26 @@ const Dashboard = () => {
           </div>
 
           {/* Quick Stats Summary */}
-          <div className="ag-card p-6 bg-primary/5 border-primary/10">
-            <h4 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-widest">Platform Pulse</h4>
+          <div className="ag-card p-6 max-[426px]:p-4 bg-primary/5 border-primary/10">
+            <h4 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-wider">Platform Pulse</h4>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm font-medium text-slate-600">
-                  <CheckCircle2 size={16} className="mr-2 text-emerald-500" />
+                <div className="flex items-center text-base font-medium text-slate-600">
+                  <CheckCircle2 size={18} className="mr-2 text-emerald-500" />
                   Resolved Leads
                 </div>
                 <span className="text-sm font-bold text-slate-900">124</span>
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm font-medium text-slate-600">
-                  <Clock size={16} className="mr-2 text-amber-500" />
+                <div className="flex items-center text-base font-medium text-slate-600">
+                  <Clock size={18} className="mr-2 text-amber-500" />
                   Pending Reviews
                 </div>
                 <span className="text-sm font-bold text-slate-900">12</span>
               </div>
               <div className="flex items-center justify-between">
-                <div className="flex items-center text-sm font-medium text-slate-600">
-                  <FileText size={16} className="mr-2 text-indigo-500" />
+                <div className="flex items-center text-base font-medium text-slate-600">
+                  <FileText size={18} className="mr-2 text-indigo-500" />
                   Draft Articles
                 </div>
                 <span className="text-sm font-bold text-slate-900">4</span>
