@@ -15,15 +15,15 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import BasicInfo from './property-form/BasicInfo';
-import PropertyDescription from './property-form/PropertyDescription';
-import RentalSuitability from './property-form/RentalSuitability';
-import Pricing from './property-form/Pricing';
-import LocationInfo from './property-form/LocationInfo';
-import PropertyDetails from './property-form/PropertyDetails';
-import AmenitiesFeatures from './property-form/AmenitiesFeatures';
-import ImageUpload from './property-form/ImageUpload';
-import NearbyPlaces from './property-form/NearbyPlaces';
+import BasicInfo from '../components/property-form/BasicInfo';
+import PropertyDescription from '../components/property-form/PropertyDescription';
+import RentalSuitability from '../components/property-form/RentalSuitability';
+import Pricing from '../components/property-form/Pricing';
+import LocationInfo from '../components/property-form/LocationInfo';
+import PropertyDetails from '../components/property-form/PropertyDetails';
+import AmenitiesFeatures from '../components/property-form/AmenitiesFeatures';
+import ImageUpload from '../components/property-form/ImageUpload';
+import NearbyPlaces from '../components/property-form/NearbyPlaces';
 
 const PropertyForm = ({ initialData, onSave, onCancel }) => {
   const [activeTab, setActiveTab] = useState('basic');

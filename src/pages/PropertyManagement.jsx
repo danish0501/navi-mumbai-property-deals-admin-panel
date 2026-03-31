@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import PropertyForm from '../components/PropertyForm';
+import PropertyForm from './AddProperty';
+import { toast } from 'react-hot-toast';
 import {
   Plus,
   Search,
@@ -39,8 +40,6 @@ const propertiesData = [
   { id: 14, title: 'Retail Space Nerul', location: 'Nerul East, Navi Mumbai', price: '₹85 L', status: 'Sold', category: 'Commercial', date: '2026-01-15', featured: false },
   { id: 15, title: 'New Launch in Dronagiri', location: 'Dronagiri, Navi Mumbai', price: '₹40 L', status: 'Active', category: 'Apartment', date: '2026-01-10', featured: true },
 ];
-
-import { toast } from 'react-hot-toast';
 
 const PropertyManagement = () => {
   const [properties, setProperties] = useState(propertiesData);
