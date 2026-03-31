@@ -5,7 +5,17 @@ import {
   Eye, 
   TrendingUp,
   ArrowUpRight,
-  ArrowDownRight
+  ArrowDownRight,
+  Clock,
+  CheckCircle2,
+  MessageSquare,
+  FileText,
+  ChevronRight,
+  MapPin,
+  Mail,
+  UserPlus,
+  PieChart as PieChartIcon,
+  BarChart2
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -16,29 +26,66 @@ import {
   Tooltip, 
   ResponsiveContainer,
   AreaChart,
-  Area
+  Area,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
+import { NavLink } from 'react-router-dom';
 
-const data = [
-  { name: 'Jan', properties: 40, views: 2400 },
-  { name: 'Feb', properties: 30, views: 1398 },
-  { name: 'Mar', properties: 20, views: 9800 },
-  { name: 'Apr', properties: 27, views: 3908 },
-  { name: 'May', properties: 18, views: 4800 },
-  { name: 'Jun', properties: 23, views: 3800 },
-  { name: 'Jul', properties: 34, views: 4300 },
+// Data from other modules (Simplified/Mocked for Dashboard)
+const propertiesData = [
+  { id: 1, title: 'Luxury Villa in Belapur', location: 'CBD Belapur', price: '₹4.5 Cr', status: 'Active', category: 'Villa', date: '2026-03-20' },
+  { id: 2, title: 'Modern Apartment in Vashi', location: 'Sector 17, Vashi', price: '₹2.8 Cr', status: 'Sold', category: 'Apartment', date: '2026-03-15' },
+  { id: 3, title: 'Studio Flat in Kharghar', location: 'Kharghar', price: '₹65 L', status: 'Draft', category: 'Flat', date: '2026-03-10' },
 ];
 
-const StatCard = ({ title, value, icon: Icon, trend, trendValue }) => (
+const enquiriesData = [
+  { id: 1, name: 'Rahul Sharma', email: 'rahul.s@example.com', property: 'Luxury Villa Belapur', status: 'Pending', date: '2026-03-22' },
+  { id: 2, name: 'Anjali Gupta', email: 'anjali@example.com', property: 'Office Space Vashi', status: 'Resolved', date: '2026-03-21' },
+  { id: 3, name: 'Vikram Singh', email: 'vikram@example.com', property: 'Modern Flat Kamothe', status: 'Pending', date: '2026-03-20' },
+];
+
+const blogsData = [
+  { id: 1, title: 'Upcoming Infrastructure Projects in Navi Mumbai', views: 1240, date: '2026-03-22' },
+  { id: 2, title: 'Why CBD Belapur is the Next Commercial Hub', views: 850, date: '2026-03-21' },
+];
+
+const chartData = [
+  { name: 'Jan', properties: 40, leads: 24 },
+  { name: 'Feb', properties: 30, leads: 13 },
+  { name: 'Mar', properties: 56, leads: 98 },
+  { name: 'Apr', properties: 27, leads: 39 },
+  { name: 'May', properties: 18, leads: 48 },
+  { name: 'Jun', properties: 23, leads: 38 },
+  { name: 'Jul', properties: 34, leads: 43 },
+];
+
+const categoryDistribution = [
+  { name: 'Apartments', value: 450, color: '#baa360' },
+  { name: 'Villas', value: 230, color: '#6366f1' },
+  { name: 'Commercial', value: 180, color: '#10b981' },
+  { name: 'Plots/Land', value: 120, color: '#f59e0b' },
+  { name: 'Others', value: 80, color: '#94a3b8' },
+];
+
+const topLocations = [
+  { name: 'CBD Belapur', leads: 840, growth: '+12%', color: 'bg-primary' },
+  { name: 'Kharghar', leads: 620, growth: '+18%', color: 'bg-indigo-500' },
+  { name: 'Vashi', leads: 510, growth: '+5%', color: 'bg-emerald-500' },
+  { name: 'Ulwe', leads: 480, growth: '+24%', color: 'bg-amber-500' },
+];
+
+const StatCard = ({ title, value, icon: Icon, trend, trendValue, color = "primary" }) => (
   <div className="ag-card p-6 flex items-start justify-between">
     <div>
       <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
       <h3 className="text-2xl font-bold text-slate-900">{value}</h3>
       <div className="flex items-center mt-2">
         {trend === 'up' ? (
-          <ArrowUpRight className="text-emerald-500 mr-1" size={16} />
+          <ArrowUpRight className="text-emerald-500 mr-1" size={14} />
         ) : (
-          <ArrowDownRight className="text-red-500 mr-1" size={16} />
+          <ArrowDownRight className="text-red-500 mr-1" size={14} />
         )}
         <span className={`text-xs font-semibold ${trend === 'up' ? 'text-emerald-500' : 'text-red-500'}`}>
           {trendValue}
@@ -46,7 +93,7 @@ const StatCard = ({ title, value, icon: Icon, trend, trendValue }) => (
         <span className="text-xs text-slate-400 ml-1">vs last month</span>
       </div>
     </div>
-    <div className="stat-card-icon text-primary">
+    <div className={`p-3 bg-${color}/10 rounded-xl text-${color}`}>
       <Icon size={24} />
     </div>
   </div>
@@ -54,11 +101,11 @@ const StatCard = ({ title, value, icon: Icon, trend, trendValue }) => (
 
 const Dashboard = () => {
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in text-left">
       {/* Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900">Dashboard Overview</h1>
-        <p className="text-slate-500">Welcome back, Administrator. Here's what's happening today.</p>
+        <p className="text-slate-500">Welcome back, Administrator. Here's a snapshot of your platform.</p>
       </div>
 
       {/* Stats Grid */}
@@ -69,6 +116,7 @@ const Dashboard = () => {
           icon={Building2} 
           trend="up" 
           trendValue="12.5%" 
+          color="primary"
         />
         <StatCard 
           title="Active Listings" 
@@ -76,6 +124,7 @@ const Dashboard = () => {
           icon={TrendingUp} 
           trend="up" 
           trendValue="8.2%" 
+          color="indigo-600"
         />
         <StatCard 
           title="New Leads" 
@@ -83,91 +132,323 @@ const Dashboard = () => {
           icon={Users} 
           trend="up" 
           trendValue="24.1%" 
+          color="emerald-600"
         />
         <StatCard 
-          title="Blog Views" 
-          value="42.5K" 
-          icon={Eye} 
-          trend="down" 
-          trendValue="3.1%" 
+          title="Total Agents" 
+          value="42" 
+          icon={UserPlus} 
+          trend="up" 
+          trendValue="4.8%" 
+          color="amber-600"
         />
       </div>
 
-      {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Properties Growth */}
-        <div className="ag-card p-6">
-            <h4 className="text-lg font-bold text-slate-900 mb-6">Property Listings Growth</h4>
-            <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={data}>
-                        <defs>
-                            <linearGradient id="colorProp" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#baa360" stopOpacity={0.3}/>
-                                <stop offset="95%" stopColor="#baa360" stopOpacity={0}/>
-                            </linearGradient>
-                        </defs>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                        <XAxis 
-                            dataKey="name" 
-                            axisLine={false} 
-                            tickLine={false} 
-                            tick={{fill: '#64748b', fontSize: 12}}
-                            dy={10}
-                        />
-                        <YAxis 
-                            axisLine={false} 
-                            tickLine={false} 
-                            tick={{fill: '#64748b', fontSize: 12}}
-                        />
-                        <Tooltip 
-                            contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'}}
-                        />
-                        <Area 
-                            type="monotone" 
-                            dataKey="properties" 
-                            stroke="#baa360" 
-                            strokeWidth={3}
-                            fillOpacity={1} 
-                            fill="url(#colorProp)" 
-                        />
-                    </AreaChart>
-                </ResponsiveContainer>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Main Chart Section */}
+        <div className="lg:col-span-2 space-y-6">
+          <div className="ag-card p-6">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h4 className="text-lg font-bold text-slate-900">Platform Performance</h4>
+                <p className="text-sm text-slate-500">Property growth and lead generation trends.</p>
+              </div>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-primary rounded-full mr-2"></div>
+                  <span className="text-xs font-semibold text-slate-600">Properties</span>
+                </div>
+                <div className="flex items-center">
+                  <div className="w-3 h-3 bg-indigo-500 rounded-full mr-2"></div>
+                  <span className="text-xs font-semibold text-slate-600">Leads</span>
+                </div>
+              </div>
             </div>
+            <div className="h-[350px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="colorProp" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#baa360" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#baa360" stopOpacity={0}/>
+                    </linearGradient>
+                    <linearGradient id="colorLeads" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#6366f1" stopOpacity={0.2}/>
+                      <stop offset="95%" stopColor="#6366f1" stopOpacity={0}/>
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                  <XAxis 
+                    dataKey="name" 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{fill: '#64748b', fontSize: 12}}
+                    dy={10}
+                  />
+                  <YAxis 
+                    axisLine={false} 
+                    tickLine={false} 
+                    tick={{fill: '#64748b', fontSize: 12}}
+                  />
+                  <Tooltip 
+                    contentStyle={{borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)'}}
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="properties" 
+                    stroke="#baa360" 
+                    strokeWidth={3}
+                    fillOpacity={1} 
+                    fill="url(#colorProp)" 
+                  />
+                  <Area 
+                    type="monotone" 
+                    dataKey="leads" 
+                    stroke="#6366f1" 
+                    strokeWidth={3}
+                    fillOpacity={1} 
+                    fill="url(#colorLeads)" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+             {/* Category Distribution Doughnut */}
+             <div className="ag-card p-6">
+               <div className="flex items-center justify-between mb-2">
+                 <h4 className="text-base font-bold text-slate-900">Category Mix</h4>
+                 <PieChartIcon size={18} className="text-slate-400" />
+               </div>
+               <div className="flex flex-col items-center">
+                 <div className="h-[200px] w-full">
+                   <ResponsiveContainer width="100%" height="100%">
+                     <PieChart>
+                       <Pie
+                         data={categoryDistribution}
+                         cx="50%"
+                         cy="50%"
+                         innerRadius={60}
+                         outerRadius={80}
+                         paddingAngle={5}
+                         dataKey="value"
+                       >
+                         {categoryDistribution.map((entry, index) => (
+                           <Cell key={`cell-${index}`} fill={entry.color} />
+                         ))}
+                       </Pie>
+                       <Tooltip 
+                          contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'}}
+                       />
+                     </PieChart>
+                   </ResponsiveContainer>
+                 </div>
+                 <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-4 w-full">
+                    {categoryDistribution.map((entry) => (
+                      <div key={entry.name} className="flex items-center justify-between">
+                         <div className="flex items-center">
+                           <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: entry.color }}></div>
+                           <span className="text-xs font-semibold text-slate-500">{entry.name}</span>
+                         </div>
+                         <span className="text-xs font-bold text-slate-900">{Math.round((entry.value / 1060) * 100)}%</span>
+                      </div>
+                    ))}
+                 </div>
+               </div>
+             </div>
+
+             {/* Top Regional Activity */}
+             <div className="ag-card p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h4 className="text-base font-bold text-slate-900">Regional Pulse</h4>
+                  <BarChart2 size={18} className="text-slate-400" />
+                </div>
+                <div className="space-y-4">
+                   {topLocations.map((loc) => (
+                     <div key={loc.name} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                           <span className="text-xs font-bold text-slate-900">{loc.name}</span>
+                           <div className="flex items-center text-[10px] font-black text-emerald-500">
+                              <ArrowUpRight size={10} className="mr-0.5" /> {loc.growth}
+                           </div>
+                        </div>
+                        <div className="relative w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+                           <div 
+                             className={`absolute left-0 top-0 h-full rounded-full ${loc.color}`}
+                             style={{ width: `${(loc.leads / 840) * 100}%` }}
+                           ></div>
+                        </div>
+                        <div className="flex justify-between text-[10px] text-slate-400 font-medium">
+                           <span>{loc.leads} Interested Leads</span>
+                           <span>{(loc.leads / 2450 * 100).toFixed(1)}% Share</span>
+                        </div>
+                     </div>
+                   ))}
+                </div>
+                <div className="mt-8 p-3 bg-slate-50 rounded-xl border border-slate-100">
+                    <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest text-center">Market Leader</p>
+                    <p className="text-sm font-bold text-primary text-center mt-1">CBD Belapur is currently top trending</p>
+                </div>
+             </div>
+          </div>
+
+          {/* Recent Properties */}
+          <div className="ag-card overflow-hidden">
+            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
+              <h4 className="text-lg font-bold text-slate-900">Recent Properties</h4>
+              <NavLink to="/admin-panel/properties" className="text-sm font-semibold text-primary hover:underline flex items-center">
+                View All <ChevronRight size={16} />
+              </NavLink>
+            </div>
+            <div className="divide-y divide-slate-50">
+              {propertiesData.map((prop) => (
+                <div key={prop.id} className="p-4 hover:bg-slate-50 transition-colors flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-12 h-12 bg-slate-100 rounded-xl flex items-center justify-center text-primary">
+                      <Building2 size={24} />
+                    </div>
+                    <div>
+                      <p className="font-bold text-slate-900 leading-tight">{prop.title}</p>
+                      <div className="flex items-center text-xs text-slate-500 mt-1">
+                        <MapPin size={12} className="mr-1" /> {prop.location}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-slate-900">{prop.price}</p>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                      prop.status === 'Active' ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      {prop.status}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
-        {/* Traffic Statistics */}
-        <div className="ag-card p-6">
-            <h4 className="text-lg font-bold text-slate-900 mb-6">Inquiry Traffic</h4>
-            <div className="h-[300px] w-full">
-                <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data}>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                        <XAxis 
-                            dataKey="name" 
-                            axisLine={false} 
-                            tickLine={false} 
-                            tick={{fill: '#64748b', fontSize: 12}}
-                            dy={10}
-                        />
-                        <YAxis 
-                            axisLine={false} 
-                            tickLine={false} 
-                            tick={{fill: '#64748b', fontSize: 12}}
-                        />
-                        <Tooltip 
-                            cursor={{fill: '#f8fafc'}}
-                            contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'}}
-                        />
-                        <Bar 
-                            dataKey="views" 
-                            fill="#baa360" 
-                            radius={[6, 6, 0, 0]} 
-                            barSize={30}
-                        />
-                    </BarChart>
-                </ResponsiveContainer>
+        {/* Sidebar Activity */}
+        <div className="space-y-6">
+          {/* Recent Enquiries */}
+          <div className="ag-card overflow-hidden">
+            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
+              <h4 className="text-lg font-bold text-slate-900">Recent Leads</h4>
+              <NavLink to="/admin-panel/inquiries" className="text-sm font-semibold text-primary hover:underline flex items-center text-right">
+                <ChevronRight size={16} />
+              </NavLink>
             </div>
+            <div className="p-4 space-y-4">
+              {enquiriesData.map((lead) => (
+                <div key={lead.id} className="flex items-start space-x-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+                  <div className="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-full flex items-center justify-center font-bold shrink-0">
+                    {lead.name.charAt(0)}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-slate-900 text-sm truncate">{lead.name}</p>
+                    <p className="text-xs text-slate-500 flex items-center truncate">
+                      <MessageSquare size={12} className="mr-1" /> {lead.property}
+                    </p>
+                    <div className="flex items-center justify-between mt-1">
+                       <span className="text-[10px] font-medium text-slate-400">{lead.date}</span>
+                       <span className={`text-[10px] font-black uppercase ${lead.status === 'Pending' ? 'text-amber-500' : 'text-emerald-500'}`}>
+                         {lead.status}
+                       </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Blog Activity */}
+          <div className="ag-card overflow-hidden">
+            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
+              <h4 className="text-lg font-bold text-slate-900">Blog Activity</h4>
+              <NavLink to="/admin-panel/blogs" className="text-sm font-semibold text-primary hover:underline flex items-center">
+                <ChevronRight size={16} />
+              </NavLink>
+            </div>
+            <div className="p-4 space-y-4">
+              {blogsData.map((blog) => (
+                <div key={blog.id} className="group">
+                  <p className="text-sm font-bold text-slate-900 group-hover:text-primary transition-colors line-clamp-2">
+                    {blog.title}
+                  </p>
+                  <div className="flex items-center justify-between mt-2">
+                    <div className="flex items-center text-xs text-slate-500">
+                      <Eye size={12} className="mr-1" /> {blog.views.toLocaleString()} views
+                    </div>
+                    <span className="text-[10px] text-slate-400 font-medium">{blog.date}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Top Performing Agents */}
+          <div className="ag-card overflow-hidden">
+            <div className="p-6 border-b border-slate-50 flex items-center justify-between">
+              <h4 className="text-lg font-bold text-slate-900">Top Agents</h4>
+              <NavLink to="/admin-panel/users" className="text-sm font-semibold text-primary hover:underline flex items-center">
+                <ChevronRight size={16} />
+              </NavLink>
+            </div>
+            <div className="p-4 space-y-4">
+              {[
+                { name: 'Sandeep Patil', leads: 48, rate: '92%', avatar: 'SP' },
+                { name: 'Meera Deshmukh', leads: 36, rate: '85%', avatar: 'MD' },
+                { name: 'Sneha Pawar', leads: 24, rate: '78%', avatar: 'SP' }
+              ].map((agent, i) => (
+                <div key={agent.name} className="flex items-center justify-between p-2 rounded-xl hover:bg-slate-50 transition-colors">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-[10px] font-bold ${
+                      i === 0 ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-600'
+                    }`}>
+                      {agent.avatar}
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900">{agent.name}</p>
+                      <p className="text-[10px] text-slate-500">{agent.leads} Active Leads</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs font-black text-emerald-600">{agent.rate}</p>
+                    <p className="text-[10px] text-slate-400 font-medium whitespace-nowrap">Conv. Rate</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Stats Summary */}
+          <div className="ag-card p-6 bg-primary/5 border-primary/10">
+            <h4 className="text-sm font-bold text-slate-900 mb-4 uppercase tracking-widest">Platform Pulse</h4>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center text-sm font-medium text-slate-600">
+                  <CheckCircle2 size={16} className="mr-2 text-emerald-500" />
+                  Resolved Leads
+                </div>
+                <span className="text-sm font-bold text-slate-900">124</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center text-sm font-medium text-slate-600">
+                  <Clock size={16} className="mr-2 text-amber-500" />
+                  Pending Reviews
+                </div>
+                <span className="text-sm font-bold text-slate-900">12</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center text-sm font-medium text-slate-600">
+                  <FileText size={16} className="mr-2 text-indigo-500" />
+                  Draft Articles
+                </div>
+                <span className="text-sm font-bold text-slate-900">4</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -175,3 +456,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+
