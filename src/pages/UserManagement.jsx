@@ -11,11 +11,7 @@ import {
   Mail,
   UserMinus,
   CheckCircle,
-  AlertCircle,
   Trash2,
-  Users,
-  ChevronLeft,
-  ChevronRight,
   ChevronDown
 } from 'lucide-react';
 
@@ -169,7 +165,7 @@ const UserManagement = () => {
       {/* Header */}
       <div className="flex flex-col min-[427px]:flex-row min-[427px]:items-center justify-between gap-4">
         <div className="text-left">
-          <h1 className="text-2xl max-[426px]:text-3xl max-[426px]:mb-4 max-[426px]:text-center font-bold text-slate-900">User Management</h1>
+          <h1 className="text-2xl max-[426px]:text-3xl max-[426px]:mb-4 max-[426px]:text-center font-bold text-black">User Management</h1>
           <p className="text-slate-500 hidden sm:block">Manage agents, administrators, and regular users.</p>
         </div>
       </div>
@@ -256,8 +252,8 @@ const UserManagement = () => {
                           {user.name.charAt(0)}
                         </div>
                         <div className="text-left">
-                          <h4 className="font-bold text-slate-900 text-sm leading-tight">{user.name}</h4>
-                          <p className="text-xs text-slate-400">{user.email}</p>
+                          <h4 className="font-bold text-semibold text-black text-base leading-tight">{user.name}</h4>
+                          <p className="text-sm text-slate-400">{user.email}</p>
                         </div>
                       </div>
                     </td>
